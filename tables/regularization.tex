@@ -1,0 +1,16 @@
+\begin{table}[tbp]
+\caption{Regularization study for $R_f=0.95$ on the mesh $(63,256,16)$. The terminal volume constraint is imposed exactly for every $\eta$, so the design radius error stays at rounding level while the terminal temperature decreases with $\eta$; the replay columns measure the discretization error of the coupled problem.}
+\label{tab:num_eta}
+\centering\footnotesize\setlength{\tabcolsep}{4pt}
+\begin{tabular}{cccccc}
+\toprule
+$\eta$ & Extinction & Replay extinction & $|R(T)-R_f|$ & Replay $|R(T)-R_f|$ & $\|u\|_{L^2}$\\
+\midrule
+$10^{-4}$ & $1.68\times10^{-2}$ & $1.58\times10^{-2}$ & $1.11\times10^{-16}$ & $2.35\times10^{-5}$ & 2.4056 \\
+$10^{-6}$ & $1.10\times10^{-3}$ & $1.45\times10^{-3}$ & $1.11\times10^{-16}$ & $1.35\times10^{-5}$ & 2.6359 \\
+$10^{-8}$ & $8.55\times10^{-5}$ & $1.20\times10^{-3}$ & $0$ & $5.03\times10^{-6}$ & 2.7421 \\
+$10^{-10}$ & $7.29\times10^{-6}$ & $1.15\times10^{-3}$ & $0$ & $4.39\times10^{-7}$ & 2.8081 \\
+$10^{-12}$ & $6.25\times10^{-7}$ & $1.12\times10^{-3}$ & $0$ & $2.35\times10^{-6}$ & 2.8571 \\
+\bottomrule
+\end{tabular}
+\end{table}

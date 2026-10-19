@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "Please cite the accompanying paper and this repository when using these materials."
+type: software
+title: "Stefan domain control: numerical experiments with prescribed terminal radius"
+authors:
+  - family-names: Fernández
+    given-names: Daniel
+repository-code: "https://github.com/danielfdzm/stefan-domain-control"
+url: "https://github.com/danielfdzm/stefan-domain-control"
+preferred-citation:
+  type: article
+  title: "Local null controllability with prescribed terminal radius for three-dimensional semilinear radial Stefan problems"
+  authors:
+    - family-names: Límaco
+      given-names: Juan
+    - family-names: Yapu
+      given-names: Luis P.
+  year: 2025
+  identifiers:
+    - type: other
+      value: "arXiv:2511.10795"
+  url: "https://arxiv.org/abs/2511.10795"

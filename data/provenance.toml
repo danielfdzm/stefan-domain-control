@@ -1,0 +1,9 @@
+fixed_point_tolerance = 1.0e-9
+relaxation = 0.8
+reaction = "f(y)=-4*tanh(y)"
+date = "2026-10-16"
+experiment_count = 126
+solver = "backward Euler ALE in s=r/R(t), volume Stefan law p'=-W_s(1,t), constrained Tikhonov HUM by SVD, relaxed Picard iteration"
+blas_threads = 1
+forward_iteration_tolerance = 2.0e-14
+julia_version = "1.13.0"

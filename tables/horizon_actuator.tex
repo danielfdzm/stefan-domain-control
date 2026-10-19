@@ -1,0 +1,19 @@
+\begin{table}[tbp]
+\caption{Control cost for shorter horizons at $b=0.55$ and for smaller actuators at $T=0.25$, with $R_f=0.95$, $a=0.02$ and the mesh $(63,256,16)$. Both components of the control grow when the horizon shrinks or the actuator contracts.}
+\label{tab:num_horizon}
+\centering\footnotesize\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccccc}
+\toprule
+Parameter & $\|u\|_{L^2}$ & $\|u_\parallel\|_{L^2}$ & $\|u_\perp\|_{L^2}$ & Replay extinction & Replay $|R(T)-R_f|$\\
+\midrule
+$T=0.15$ & 7.3062 & 3.5952 & 6.3604 & $1.01\times10^{-3}$ & $1.11\times10^{-5}$ \\
+$T=0.20$ & 4.1717 & 2.3691 & 3.4337 & $1.09\times10^{-3}$ & $5.12\times10^{-6}$ \\
+$T=0.25$ & 2.8081 & 1.7720 & 2.1785 & $1.15\times10^{-3}$ & $4.39\times10^{-7}$ \\
+$T=0.35$ & 1.6563 & 1.2035 & 1.1379 & $1.29\times10^{-3}$ & $8.02\times10^{-6}$ \\
+$b=0.40$ & 5.2330 & 2.9187 & 4.3435 & $1.41\times10^{-3}$ & $1.43\times10^{-3}$ \\
+$b=0.475$ & 3.8040 & 2.2432 & 3.0723 & $5.99\times10^{-4}$ & $4.51\times10^{-5}$ \\
+$b=0.55$ & 2.8081 & 1.7720 & 2.1785 & $1.15\times10^{-3}$ & $4.39\times10^{-7}$ \\
+$b=0.65$ & 1.9400 & 1.3509 & 1.3924 & $5.43\times10^{-4}$ & $5.33\times10^{-5}$ \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,14 @@
+constrained = true
+amplitude = 0.02
+profile = "positive"
+eta = 1.0e-10
+Rmax = 1.2
+Rmin = 0.8
+T = 0.2
+b = 0.55
+Rf = 0.95
+R0 = 1.0
+K = 16
+M = 256
+reaction = -4.0
+N = 63
