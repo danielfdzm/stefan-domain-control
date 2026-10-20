@@ -50,6 +50,12 @@ solve, on the design grid and on a doubled grid, without any terminal condition.
 
 ## Experiments and figures
 
+Signed temperature and control fields use **cividis**, a blue–gray–yellow
+color scale with symmetric limits and zero in gray. Panels comparing the same
+field share one scale; the animation keeps its scale fixed across all frames.
+Nonnegative diagnostics use the sequential **Blues** palette on their displayed
+range.
+
 | Experiment | Question | Records |
 | --- | --- | --- |
 | **Fan of targets** | From one initial state, can the same actuator reach seven prescribed radii from 0.85 to 1.15 while extinguishing the temperature? | `fan_Rf_*`, `free_radius` |

@@ -49,6 +49,13 @@ figure and table to its underlying records.
 | `regularization.tex` | `eta_-4`, `eta_-6`, `eta_-8`, `mesh_63`, `eta_-12` |
 | `horizon_actuator.tex` | `time_*`, `support_*`, `mesh_63` |
 
+Signed temperature and control fields use the blue–gray–yellow `cividis`
+palette with limits $[-A,A]$, where $A$ is the largest absolute value in the
+fields being compared, so zero is gray. Compared panels share these limits,
+and the animation uses one range for all three runs and all frames. Nonnegative
+diagnostics retain the sequential `Blues` palette, with ranges shown on their
+colorbars.
+
 ## Model and discretization
 
 With $s=r/R(t)$, $W(s,t)=R(t)\,s\,z(R(t)s,t)$ and $q(r,t)=r\,v(r,t)$, the radial
