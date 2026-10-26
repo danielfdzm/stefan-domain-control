@@ -245,13 +245,16 @@ function solve_control(p::Config; maxiter=100, tol=1e-9, damping=0.8, verbose=tr
 end
 
 """
-    replay(result; N, M, uncontrolled=false)
+    replay(result; N, M, uncontrolled=false, tol=2e-14)
 
 Independent nonlinear forward integration of the coupled discrete system with the
 stored control, on the design grid or on a finer one. No terminal condition is
 imposed, overwritten or projected: the terminal temperature and radius are measured.
+`tol` is the absolute nonlinear iteration tolerance. Larger-amplitude states may
+need a slightly larger value to stay above floating-point roundoff.
 """
-function replay(result; N=result.p.N, M=result.p.M, uncontrolled=false)
+function replay(result; N=result.p.N, M=result.p.M, uncontrolled=false, tol::Real=2e-14)
+    isfinite(tol) && tol > 0 || throw(ArgumentError("Replay tolerance must be finite and positive"))
     old = result.p
     @assert M % old.M == 0 "Replay time grid must resolve every control discontinuity"
     p = Config(; (name=>getfield(old,name) for name in fieldnames(Config) if name ∉ (:N,:M))..., N=N, M=M)
@@ -269,7 +272,7 @@ function replay(result; N=result.p.N, M=result.p.M, uncontrolled=false)
             qv = vol[n] - dt*flux(v, p)
             q = radius(qv)
             defect = max(maximum(abs, v-w), abs(q-rad))
-            if defect < 2e-14
+            if defect < tol
                 W[:,n+1] = v; R[n+1] = q; vol[n+1] = qv
                 converged = true; break
             end

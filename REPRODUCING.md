@@ -43,7 +43,7 @@ figure and table to its underlying records.
 | `fig_structure.pdf` | `fan_Rf_0.95`; the decomposition is evaluated at the converged frozen coefficients |
 | `fig_landscape.pdf` | the 99 `landscape_*` rows of `summary.csv` |
 | `fig_surfaces.pdf` | `fan_Rf_0.85` |
-| `stefan_domain_control.gif` | `fan_Rf_0.85`, `free_radius`, `fan_Rf_1.15` |
+| `stefan_domain_control.gif` | `animation_Rf_0.50`, `animation_free_radius`, `animation_Rf_1.50` in `data/animation/` |
 | `targets.tex` | fan and `free_radius` |
 | `mesh_refinement.tex` | `mesh_31`, `mesh_63`, `mesh_127`, `mesh_255` |
 | `regularization.tex` | `eta_-4`, `eta_-6`, `eta_-8`, `mesh_63`, `eta_-12` |
@@ -55,6 +55,39 @@ fields being compared, so zero is gray. Compared panels share these limits,
 and the animation uses one range for all three runs and all frames. Nonnegative
 diagnostics retain the sequential `Blues` palette, with ranges shown on their
 colorbars.
+
+## README animation experiment
+
+The animation compares prescribed targets $R_f=0.5$ and $1.5$ with a
+recomputed temperature-only control on the same mesh $(N,M,K)=(127,512,32)$.
+All three runs use $R_0=1$, $T=0.25$, $b=0.4$, $(R_*,E)=(0.45,1.6)$,
+$\eta=10^{-10}$ and the same positive initial profile with amplitude $a=0.02$.
+The smaller actuator stays inside the contracting ball. The three trajectories
+share one spatial scale and a symmetric cividis temperature scale across all
+frames. Playback lasts 13.6 seconds, including the final-state hold; this is
+half the previous playback speed and does not change the simulation horizon.
+
+Their parameters, states, controls and iteration histories are stored in
+`data/animation/`, alongside a separate `summary.csv` and `provenance.toml`.
+The summary records the terminal errors and the independent replays on both
+the design mesh and a doubled mesh. These three runs are separate from the
+126 paper experiments in `data/summary.csv`. The doubled-mesh animation
+replays use an iteration tolerance of $10^{-12}$ to accommodate floating-point
+roundoff in the larger temperature pulses; design-mesh replays retain
+$2\times10^{-14}$.
+
+| Target | Iterations | Design $R(T)$ | Replay $R(T)$ | Design extinction | Replay extinction |
+| --- | --- | --- | --- | --- | --- |
+| 0.5 | 38 | 0.500000 | 0.506030 | 3.68e-06 | 6.78e-03 |
+| free | 14 | 1.002471 | 1.002475 | 2.85e-06 | 9.27e-04 |
+| 1.5 | 25 | 1.500000 | 1.497339 | 3.22e-05 | 6.37e-04 |
+
+Extinction is the terminal spherical temperature norm divided by its peak
+value during the run. The animation shows the design-grid trajectories, whose
+prescribed terminal radii are reached to rounding error. The doubled-grid
+replay errors are about $0.00603$ for contraction and $0.00266$ for expansion;
+these larger changes in radius have greater discretization error than the
+paper's smaller target changes.
 
 ## Model and discretization
 
@@ -112,20 +145,21 @@ problem, integrates the discrete Stefan law from the computed flux, and
 relaxes with factor 0.8. The initial frozen radius interpolates linearly from
 $R_0$ to $R_f$. The iteration stops when the maximum of the state, radius and
 radius-speed defects divided by $\delta_0$ is below $10^{-9}$; every radius
-iterate must stay in $(R_*,E)=(0.8,1.2)$, and lack of convergence is reported
-as failure. At convergence the computed radius satisfies the discrete Stefan
+iterate must stay in its configured admissible interval $(R_*,E)$, and lack
+of convergence is reported as failure. At convergence the computed radius satisfies the discrete Stefan
 law exactly and $R(T)=R_f$ to rounding, and the residuals of the nonlinear
 discrete equations are checked by substitution.
 
 Each control is then replayed by a fresh coupled nonlinear forward solve, on the
 design grid and on $(2N+1,2M)$, solving state and Stefan law together at every
-step to a tolerance of $2\times10^{-14}$. The replay imposes no terminal
+step to a tolerance of $2\times10^{-14}$ for the paper experiments. The
+replay imposes no terminal
 condition: its terminal temperature and radius are measured. The same-grid
-replay agrees with the optimized trajectory to $10^{-9}$ in every run.
+replay agrees with the optimized trajectory to $10^{-9}$ in every stored run.
 
 ## Experiments
 
-All runs use $R_0=1$, $R_*=0.8$, $E=1.2$ and, unless stated otherwise,
+The 126 paper runs use $R_0=1$, $R_*=0.8$, $E=1.2$ and, unless stated otherwise,
 $T=0.25$, $b=0.55$, $\eta=10^{-10}$ and the positive profile
 $z_0(r)=a(1-s^2)(1+\tfrac14\cos 2\pi s)$ with $a=0.02$. The oscillatory profile
 is $a(1-s^2)\cos 2\pi s$.

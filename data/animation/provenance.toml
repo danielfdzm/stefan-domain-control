@@ -1,0 +1,13 @@
+date = "2026-10-26"
+experiment_count = 3
+replay_state_nodes = 255
+julia_version = "1.13.0"
+relaxation = 0.8
+purpose = "README animation with prescribed terminal radii 0.5 and 1.5 and a temperature-only reference"
+reaction = "f(y)=-4*tanh(y)"
+replay_time_steps = 1024
+refined_replay_iteration_tolerance = 1.0e-12
+fixed_point_tolerance = 1.0e-9
+blas_threads = 1
+forward_iteration_tolerance = 2.0e-14
+solver = "backward Euler ALE in s=r/R(t), volume Stefan law p'=-W_s(1,t), constrained Tikhonov HUM by SVD, relaxed Picard iteration"

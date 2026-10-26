@@ -14,10 +14,10 @@
 
 <p align="center">
   <a href="figures/animation/stefan_domain_control_still.png">
-    <img src="figures/animation/stefan_domain_control.gif" alt="Animation: three balls of water in ice, cut open to show the temperature on a diametral section. With a temperature-only control the ball keeps its radius; with a prescribed terminal radius the same control region shrinks the ball to 0.85 or grows it to 1.15 while the temperature returns to zero. The radius traces below reach their targets." width="100%">
+    <img src="figures/animation/stefan_domain_control.gif" alt="Animation: three balls of water in ice, cut open to show the temperature on a diametral section. With a temperature-only control the final radius is left free; with a prescribed terminal radius the same control region shrinks the ball to 0.5 or grows it to 1.5 while the temperature returns to zero. The radius traces below reach their targets." width="100%">
   </a>
 </p>
-<p align="center"><sub>Three controls from the same initial temperature, acting only inside the dashed circle of radius <i>b</i> = 0.55. Left and right: the free boundary is steered to the prescribed radii <i>R<sub>f</sub></i> = 0.85 and 1.15 while the temperature is driven to zero. Middle: the temperature-only control of the earlier experiments, which leaves the radius free. The traces below are the computed radii and the hollow circles their prescribed targets. <a href="figures/animation/stefan_domain_control_still.png">Final frame</a>.</sub></p>
+<p align="center"><sub>Three controls from the same initial temperature, acting only inside the dashed circle of radius <i>b</i> = 0.4. Left and right: the free boundary is steered to the prescribed radii <i>R<sub>f</sub></i> = 0.5 and 1.5 while the temperature is driven to zero. Middle: a temperature-only control with the same actuator, which leaves the radius free. The traces below are the computed radii and the hollow circles their prescribed targets. The animation plays at half speed, with a 13.6-second loop. <a href="data/animation/summary.csv">Animation experiment records</a> · <a href="figures/animation/stefan_domain_control_still.png">Final frame</a>.</sub></p>
 
 Water occupies a ball $B_{R(t)}\subset\mathbb R^3$ surrounded by ice at zero
 temperature. The temperature $y$ solves a semilinear heat equation
@@ -50,6 +50,10 @@ solve, on the design grid and on a doubled grid, without any terminal condition.
 
 ## Experiments and figures
 
+The README animation uses three additional runs in [data/animation/](data/animation/)
+with actuator radius $b=0.4$ and prescribed targets $R_f=0.5$ and $1.5$. The
+figures and tables below report the original 126 paper experiments.
+
 Signed temperature and control fields use **cividis**, a blue–gray–yellow
 color scale with symmetric limits and zero in gray. Panels comparing the same
 field share one scale; the animation keeps its scale fixed across all frames.
@@ -65,13 +69,13 @@ range.
 | **Refinement and regularization** | Does the replay error decrease under joint refinement, and is the radius constraint exact for every $\eta$? | `mesh_*`, `eta_*` |
 | **Horizon and actuator** | How do both control components grow for shorter horizons and smaller actuators? | `time_*`, `support_*` |
 
-All 126 runs converged in 14 to 20 outer iterations; on the design grid every
-prescribed terminal radius is met to rounding error and the residuals of the
+The 126 paper experiments converged in 14 to 20 outer iterations; on the
+design grid every prescribed terminal radius is met to rounding error and the residuals of the
 nonlinear discrete equations are below $10^{-9}$. The relative KKT residual is
 below $10^{-11}$ for every run with nonzero initial temperature and below
 $2\times10^{-6}$ for the twelve runs that start from zero temperature, where the
 optimality system is scaled by $\eta$. The replay radius error on the doubled
-grid is below $9\times10^{-5}$ for every fine-mesh run.
+grid is below $9\times10^{-5}$ for every fine-mesh paper run.
 
 [![Seven prescribed terminal radii from one initial state](figures/previews/fig_fan.png)](figures/paper/fig_fan.pdf)
 

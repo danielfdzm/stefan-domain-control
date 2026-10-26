@@ -17,6 +17,25 @@ maintained privately.
 
 The 99 `landscape_*` runs appear only in `summary.csv`.
 
+## README animation records
+
+`animation/` contains three additional runs: `animation_Rf_0.50`,
+`animation_free_radius` and `animation_Rf_1.50`. All three use actuator radius
+`b=0.4` and admissible radius interval `(0.45, 1.6)`, with the same initial data
+and mesh `(N,M,K)=(127,512,32)`. The constrained runs prescribe terminal radii
+`0.5` and `1.5`; the middle comparison leaves the terminal radius free.
+
+The `NAME_config.toml`, `NAME_state.csv`, `NAME_control.csv`,
+`NAME_history.csv` and `NAME_passive_state.csv` files use the formats above.
+`animation/summary.csv` records the design and replay diagnostics, and
+`animation/provenance.toml` records the environment and experiment settings.
+In the animation summary, `Rmin` and `Rmax` are the admissible bounds, and
+`same_state_error` and `same_radius_error` are the maximum differences between
+the optimized trajectory and its independent replay on the design mesh.
+These records are separate from the 126 paper experiments in `summary.csv`.
+Load an animation run with
+`load_run("data/animation", "animation_Rf_0.50")`.
+
 ## Columns of `summary.csv`
 
 `name, N, M, K, amplitude, profile, T, b, R0, Rf, eta, constrained` are the
