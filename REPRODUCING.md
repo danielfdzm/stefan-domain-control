@@ -49,12 +49,12 @@ figure and table to its underlying records.
 | `regularization.tex` | `eta_-4`, `eta_-6`, `eta_-8`, `mesh_63`, `eta_-12` |
 | `horizon_actuator.tex` | `time_*`, `support_*`, `mesh_63` |
 
-Signed temperature and control fields use the blue–gray–yellow `cividis`
-palette with limits $[-A,A]$, where $A$ is the largest absolute value in the
-fields being compared, so zero is gray. Compared panels share these limits,
-and the animation uses one range for all three runs and all frames. Nonnegative
-diagnostics retain the sequential `Blues` palette, with ranges shown on their
-colorbars.
+In the paper figures, signed temperature and control fields use the
+blue–gray–yellow `cividis` palette with limits $[-A,A]$, where $A$ is the largest
+absolute value in the fields being compared, so zero is gray. Compared panels
+share these limits. Nonnegative diagnostics retain the sequential `Blues`
+palette, with ranges shown on their colorbars. The animation uses a separate
+colorbar for each evolution, as described below.
 
 ## README animation experiment
 
@@ -63,9 +63,11 @@ recomputed temperature-only control on the same mesh $(N,M,K)=(127,512,32)$.
 All three runs use $R_0=1$, $T=0.25$, $b=0.4$, $(R_*,E)=(0.45,1.6)$,
 $\eta=10^{-10}$ and the same positive initial profile with amplitude $a=0.02$.
 The smaller actuator stays inside the contracting ball. The three trajectories
-share one spatial scale and a symmetric cividis temperature scale across all
-frames. Playback lasts 13.6 seconds, including the final-state hold; this is
-half the previous playback speed and does not change the simulation horizon.
+share one spatial scale and the cividis palette. Each evolution has its own
+colorbar, whose limits are the minimum and maximum temperatures over that
+run’s full trajectory. These three ranges stay fixed across frames. Playback
+lasts 13.6 seconds, including the final-state hold; this is half the previous
+playback speed and does not change the simulation horizon.
 
 Their parameters, states, controls and iteration histories are stored in
 `data/animation/`, alongside a separate `summary.csv` and `provenance.toml`.
