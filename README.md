@@ -17,7 +17,7 @@
     <img src="figures/animation/stefan_domain_control.gif" alt="Animation: three balls of water in ice, cut open to show the temperature on a diametral section. With a temperature-only control the final radius is left free; with a prescribed terminal radius the same control region shrinks the ball to 0.5 or grows it to 1.5 while the temperature returns to zero. The radius traces below reach their targets." width="100%">
   </a>
 </p>
-<p align="center"><sub>Three controls from the same initial temperature, acting only inside the dashed circle of radius <i>b</i> = 0.4. Left and right: the free boundary is steered to the prescribed radii <i>R<sub>f</sub></i> = 0.5 and 1.5 while the temperature is driven to zero. Middle: a temperature-only control with the same actuator, which leaves the radius free. The traces below are the computed radii and the hollow circles their prescribed targets. Each evolution has its own temperature min–max colorbar, fixed across frames; all three use cividis. The animation plays at half speed, with a 13.6-second loop. <a href="data/animation/summary.csv">Animation experiment records</a> · <a href="figures/animation/stefan_domain_control_still.png">Final frame</a>.</sub></p>
+<p align="center"><sub>Three controls from the same initial temperature, acting only inside the dashed circle of radius <i>b</i> = 0.4. Left and right: the free boundary is steered to the prescribed radii <i>R<sub>f</sub></i> = 0.5 and 1.5 while the temperature is driven to zero. Middle: a temperature-only control with the same actuator, which leaves the radius free. The traces below are the computed radii and the hollow circles their prescribed targets. Each evolution has its own symmetric colorbar, fixed across frames; all three use cividis with zero at the gray midpoint, blue below zero and yellow above. The animation plays at half speed, with a 13.6-second loop. <a href="data/animation/summary.csv">Animation experiment records</a> · <a href="figures/animation/stefan_domain_control_still.png">Final frame</a>.</sub></p>
 
 Water occupies a ball $B_{R(t)}\subset\mathbb R^3$ surrounded by ice at zero
 temperature. The temperature $y$ solves a semilinear heat equation
@@ -57,9 +57,10 @@ figures and tables below report the original 126 paper experiments.
 In the paper figures, signed temperature and control fields use **cividis**, a
 blue–gray–yellow color scale with symmetric limits and zero in gray. Panels
 comparing the same field share one scale. The animation uses the same palette
-with a separate colorbar for each evolution, spanning that run’s full
-temperature range and fixed across frames. Nonnegative diagnostics use the
-sequential **Blues** palette on their displayed range.
+with a separate symmetric colorbar for each evolution, fixed across frames.
+Each range is centered at zero in gray, with blue below zero and yellow above.
+Nonnegative diagnostics use the sequential **Blues** palette on their displayed
+range.
 
 | Experiment | Question | Records |
 | --- | --- | --- |

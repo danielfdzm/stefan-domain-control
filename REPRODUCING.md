@@ -63,11 +63,13 @@ recomputed temperature-only control on the same mesh $(N,M,K)=(127,512,32)$.
 All three runs use $R_0=1$, $T=0.25$, $b=0.4$, $(R_*,E)=(0.45,1.6)$,
 $\eta=10^{-10}$ and the same positive initial profile with amplitude $a=0.02$.
 The smaller actuator stays inside the contracting ball. The three trajectories
-share one spatial scale and the cividis palette. Each evolution has its own
-colorbar, whose limits are the minimum and maximum temperatures over that
-run’s full trajectory. These three ranges stay fixed across frames. Playback
-lasts 13.6 seconds, including the final-state hold; this is half the previous
-playback speed and does not change the simulation horizon.
+share one spatial scale and the cividis palette. Each evolution $j$ has its
+own symmetric colorbar with limits $[-A_j,A_j]$, where $A_j$ is the largest
+absolute temperature over that run’s full trajectory. Zero is the gray
+midpoint, with blue below zero and yellow above. These independent ranges stay
+fixed across frames. Playback lasts 13.6 seconds, including the final-state
+hold; this is half the previous playback speed and does not change the
+simulation horizon.
 
 Their parameters, states, controls and iteration histories are stored in
 `data/animation/`, alongside a separate `summary.csv` and `provenance.toml`.
