@@ -1,0 +1,21 @@
+\begin{table}[tbp]
+\caption{Absolute spherical temperature norms and initial-relative error for the prescribed-radius and zero-temperature experiments. Replay uses the doubled mesh. The last column is a percentage, using the initial norm on the replay mesh; it is undefined for zero initial temperature.}
+\label{tab:num_terminal_accuracy}
+\centering\footnotesize\setlength{\tabcolsep}{4pt}
+\begin{tabular}{cccccc}
+\toprule
+$a$ & $R_f$ & $\|y_0\|_{L^2}$ & Design $\|y(T)\|_{L^2}$ & Replay $\|y(T)\|_{L^2}$ & Replay/initial (\%)\\
+\midrule
+0.02 & 0.85 & $1.75\times10^{-2}$ & $3.98\times10^{-6}$ & $4.58\times10^{-4}$ & 2.61 \\
+0.02 & 0.90 & $1.75\times10^{-2}$ & $3.18\times10^{-6}$ & $2.48\times10^{-4}$ & 1.42 \\
+0.02 & 0.95 & $1.75\times10^{-2}$ & $2.20\times10^{-6}$ & $2.00\times10^{-4}$ & 1.14 \\
+0.02 & 1.00 & $1.75\times10^{-2}$ & $1.13\times10^{-7}$ & $3.88\times10^{-6}$ & 0.0221 \\
+0.02 & 1.05 & $1.75\times10^{-2}$ & $3.27\times10^{-6}$ & $2.23\times10^{-4}$ & 1.27 \\
+0.02 & 1.10 & $1.75\times10^{-2}$ & $8.86\times10^{-6}$ & $5.65\times10^{-4}$ & 3.22 \\
+0.02 & 1.15 & $1.75\times10^{-2}$ & $1.76\times10^{-5}$ & $7.24\times10^{-4}$ & 4.13 \\
+0.02 & free & $1.75\times10^{-2}$ & $2.36\times10^{-8}$ & $2.86\times10^{-6}$ & 0.0163 \\
+0.00 & 0.90 & $0$ & $3.09\times10^{-6}$ & $2.42\times10^{-4}$ & --- \\
+0.00 & 1.10 & $0$ & $9.00\times10^{-6}$ & $5.94\times10^{-4}$ & --- \\
+\bottomrule
+\end{tabular}
+\end{table}

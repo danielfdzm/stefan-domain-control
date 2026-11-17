@@ -17,7 +17,7 @@ using LinearAlgebra, Printf, DelimitedFiles, TOML
 export Config, solve_control, frozen_control, replay, diagnostics, initial_profile,
        initial_state, physical_state, physical_control, control_value, control_matrix,
        operators, mass_control, flux, flux_stencil, grid, volume, radius, h1_seminorm,
-       delta0, save_run, load_run, config_dict, config_from_dict
+       delta0, save_run, load_run, config_dict, config_from_dict, normalized_auxiliary_adjoint
 
 """
     Config
@@ -140,7 +140,9 @@ frozen radius `Rbar`. The terminal map `x -> H x + d` and the volume functional
 `x -> g'x + l0` are assembled with the exact discrete adjoints. The control
 minimizes `|x|^2/2 + |Hx+d|^2/(2 eta)` subject to `g'x = m`, where `m` is the
 flux integral that steers the volume to `R_f^3/3`. The multiplier `lambda` and the
-discrete auxiliary adjoint `psi` are returned together with the trajectory.
+discrete flux adjoint `psi` (the array of multipliers Lambda) are returned together
+with the trajectory. `info.psinorm` is the Euclidean norm of the volume gradient
+`gvec` in the physical control metric, not the spatial norm of the continuous psi.
 """
 function frozen_control(Wbar, Rbar, p::Config)
     dt = p.T/p.M; h = 1/(p.N+1)
@@ -200,6 +202,25 @@ function frozen_control(Wbar, Rbar, p::Config)
             psinorm=gnorm, energy=norm(x), energy_parallel=norm(parallel),
             energy_orthogonal=norm(x .- parallel), gvec=gvec, x=x)
     W, vol, C, psi, info
+end
+
+"""
+    normalized_auxiliary_adjoint(Lambda, R, p)
+
+Convert the discrete flux multipliers to the normalization of the continuous
+auxiliary adjoint with boundary value one. The time-step operator discretizes
+`N = M/R^2`, so `M* psi = N*(R^2 psi)` and the conversion is
+`psi[:,n] = -Lambda[:,n] / (h*R[n+1]^2)`. `R` includes the initial radius;
+column `n` uses the same right-endpoint radius as the frozen state operator.
+
+All spatial nodes are returned without filtering. The second-order one-sided
+flux stencil produces an artifact at the last interior node, so this node should
+be excluded explicitly when comparing interior values with the continuum field.
+"""
+function normalized_auxiliary_adjoint(Lambda, R, p::Config)
+    size(Lambda) == (p.N, p.M) || throw(DimensionMismatch("expected N by M flux multipliers"))
+    length(R) == p.M+1 || throw(DimensionMismatch("radius must include the initial time"))
+    -(p.N+1) .* Lambda ./ reshape(R[2:end].^2, 1, :)
 end
 
 """

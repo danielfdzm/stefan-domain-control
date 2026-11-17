@@ -11,12 +11,9 @@ preferred-citation:
   type: article
   title: "Local null controllability with prescribed terminal radius for three-dimensional semilinear radial Stefan problems"
   authors:
-    - family-names: Límaco
-      given-names: Juan
+    - family-names: Fernández
+      given-names: Daniel
     - family-names: Yapu
       given-names: Luis P.
-  year: 2025
-  identifiers:
-    - type: other
-      value: "arXiv:2511.10795"
-  url: "https://arxiv.org/abs/2511.10795"
+    - family-names: Límaco
+      given-names: Juan

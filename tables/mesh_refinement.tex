@@ -1,10 +1,10 @@
 \begin{table}[tbp]
-\caption{Joint refinement of the state grid, time grid and control space for $R_f=0.95$, $a=0.02$ and $\eta=10^{-10}$. The design terminal radius equals $R_f$ to rounding in every row; the replay radius error is measured on $(2N+1,2M)$ with the original control coefficients. The last column is the discrete norm of the auxiliary adjoint on the control region.}
+\caption{Joint refinement for $R_f=0.95$, $a=0.02$ and $\eta=10^{-10}$, with replay on the doubled mesh. The design radius error is at rounding level; the last column is the norm $|g|$ of the discrete volume gradient in the physical control metric.}
 \label{tab:num_mesh}
 \centering\footnotesize\setlength{\tabcolsep}{4pt}
 \begin{tabular}{rrrccccc}
 \toprule
-$N$ & $M$ & $K$ & Extinction & Replay extinction & Replay $|R(T)-R_f|$ & $\|u\|_{L^2}$ & $\|\psi\|$\\
+$N$ & $M$ & $K$ & Extinction & Replay extinction & Replay $|R(T)-R_f|$ & $\|u\|_{L^2}$ & $|g|$\\
 \midrule
 31 & 128 & 8 & $8.41\times10^{-6}$ & $1.22\times10^{-3}$ & $5.28\times10^{-5}$ & 3.0038 & 0.02787 \\
 63 & 256 & 16 & $7.29\times10^{-6}$ & $1.15\times10^{-3}$ & $4.39\times10^{-7}$ & 2.8081 & 0.02863 \\

@@ -1,13 +1,15 @@
 # Null controllability of a radial Stefan problem with prescribed terminal radius
 
-**Daniel Fernández**
+**Numerical implementation: Daniel Fernández**
+
+Companion to the manuscript by Daniel Fernández, Luis P. Yapu and Juan Límaco.
 
 [![arXiv](https://img.shields.io/badge/arXiv-2511.10795-B31B1B?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2511.10795)
 [![Julia 1.13](https://img.shields.io/badge/Julia-1.13-9558B2?logo=julia&logoColor=white)](Project.toml)
 [![CairoMakie](https://img.shields.io/badge/figures-CairoMakie%200.15-1F77B4)](Project.toml)
 [![Environment](https://img.shields.io/badge/environment-pinned%20Manifest-2EA043)](REPRODUCING.md)
 [![Checksums](https://img.shields.io/badge/data-SHA--256%20verified-555555)](checksums.sha256)
-[![Tests](https://img.shields.io/badge/tests-45%20passing-2EA043)](test/runtests.jl)
+[![Tests](https://img.shields.io/badge/tests-Julia-2EA043)](test/runtests.jl)
 [![Cite](https://img.shields.io/badge/cite-CITATION.cff-blue)](CITATION.cff)
 
 [Use and verify the results](REPRODUCING.md) · [Experiments and figures](#experiments-and-figures) · [Data](data/README.md) · [Citation](CITATION.cff)
@@ -42,11 +44,15 @@ The experiments here are the discrete counterpart of that construction. The
 terminal-volume functional is assembled with the exact discrete adjoint of the
 backward Euler scheme, the control is the minimizer of a regularized HUM
 functional under the single linear constraint $g^\top x=m$, and the control
-splits exactly as in the paper into a multiple of $\psi$ that adjusts the volume
-and a volume-neutral part orthogonal to it. A relaxed fixed-point iteration
-updates the frozen radius and semilinearity until the fully nonlinear discrete
+splits into a multiple of the discrete volume-gradient vector $g$ that adjusts
+the volume and a volume-neutral part orthogonal to it in the physical control
+metric. A relaxed fixed-point iteration updates the frozen radius and semilinearity until the fully nonlinear discrete
 system holds. Every stored control is then replayed by a fresh nonlinear forward
-solve, on the design grid and on a doubled grid, without any terminal condition.
+solve on the design grid and, for the 27 runs outside the landscape sweep,
+on a doubled grid, without any terminal condition. The controls use physical
+hat functions throughout $B_b$ over the full time interval. They are admissible
+for the physical problem; the proof constructs controls on a smaller moving
+annulus after an initial uncontrolled interval.
 
 ## Experiments and figures
 
@@ -66,7 +72,8 @@ range.
 | --- | --- | --- |
 | **Fan of targets** | From one initial state, can the same actuator reach seven prescribed radii from 0.85 to 1.15 while extinguishing the temperature? | `fan_Rf_*`, `free_radius` |
 | **Pure domain control** | Starting from zero temperature, how does the control move the interface to $R_f=0.90$ or $1.10$ and then remove the heat it created? | `pure_Rf_*` |
-| **Control structure** | How large are the volume-adjusting component $u_\parallel\propto\psi$ and the orthogonal component $u_\perp$, and what does $\psi$ look like? | `fan_Rf_0.95`, `*_psi.csv` |
+| **Control structure** | How large are the volume-adjusting component $x_\parallel\propto g$ and the orthogonal component $x_\perp$, and what does $\psi$ look like? | `fan_Rf_0.95`, `*_psi.csv` |
+| **Terminal accuracy** | What are the absolute terminal norms and the replay error relative to the initial temperature? | `tables/terminal_accuracy.csv`, `tables/terminal_accuracy_all.csv` |
 | **Local regime** | How does the cost depend on the initial amplitude and the prescribed radius change, and does it stay below $C\delta_0$? | 99 `landscape_*` rows of `summary.csv` |
 | **Refinement and regularization** | Does the replay error decrease under joint refinement, and is the radius constraint exact for every $\eta$? | `mesh_*`, `eta_*` |
 | **Horizon and actuator** | How do both control components grow for shorter horizons and smaller actuators? | `time_*`, `support_*` |
@@ -113,11 +120,13 @@ produces the motion is visible in the norms (d).
 
 [![Auxiliary adjoint and the two components of the control](figures/previews/fig_structure.png)](figures/paper/fig_structure.pdf)
 
-*Structure of the control for $R_f=0.95$. (a) The auxiliary adjoint $\psi$,
-the Riesz representer of the terminal-volume functional, has unit boundary
-value at $s=1$ and vanishes at $t=T$. (b) The volume-adjusting component
-$u_\parallel$ is a multiple of $\psi$ on the actuator. (c) The orthogonal
-component does not change the terminal volume. (d) Their norms over time.
+*Structure of the control for $R_f=0.95$. (a) The continuous auxiliary adjoint
+is approximated by $-\Lambda/(hR(t)^2)$; the last spatial node is omitted
+because the one-sided boundary-flux stencil creates a discrete source artifact
+there. The color range covers all displayed values. (b) The volume-adjusting
+component corresponds to $x_\parallel=(m/|g|^2)g$ in the weighted physical
+control variables. (c) The orthogonal component does not change the terminal
+volume. (d) Their norms over time.
 [PDF](figures/paper/fig_structure.pdf)*
 
 [![Cost landscape in the local regime](figures/previews/fig_landscape.png)](figures/paper/fig_landscape.pdf)
@@ -138,29 +147,45 @@ Generated LaTeX tables are in [tables/](tables/): the fan of targets, joint
 refinement up to $(N,M,K)=(255,1024,64)$, the regularization study in which the
 radius error stays at rounding level for every $\eta$ while the terminal
 temperature decreases, and the horizon and actuator sweeps.
+[Terminal accuracy](tables/terminal_accuracy.csv) reports the initial and
+terminal spherical norms for the seven targets, the free-radius reference and
+the two zero-temperature cases.
+[All 126 diagnostics](tables/terminal_accuracy_all.csv) also identify whether
+the replay used the same or a doubled grid.
 
 ## Use and verify the results
 
-This public repository includes the solver, tests, experiment records and
-generated figures, tables and animation. The experiment and visualization
-scripts are maintained privately and are not included.
-
-From the repository root, install the pinned Julia environment, run the tests
-and verify the included records:
+This repository includes the solver, tests, experiment drivers, plotting and
+table-generation scripts, archived records, figures, tables and animation.
+From the repository root, install the pinned Julia environment and verify the
+archived results:
 
 ```bash
 julia --project=. -e 'using Pkg; Pkg.instantiate()'
 julia --project=. test/runtests.jl
-shasum -a 256 -c checksums.sha256
+julia --project=. scripts/check.jl
 ```
 
-The [methods and verification guide](REPRODUCING.md) describes the included
-records and explains the discretization, the constrained HUM step and the
-fixed-point iteration. The
-solver is in [src/StefanDomainControl.jl](src/StefanDomainControl.jl); the
-records are documented in [data/README.md](data/README.md).
-[figures/paper/](figures/paper/) contains the PDFs,
-[figures/previews/](figures/previews/) the browser previews and
+Regenerate the paper figures and tables from the archived records:
+
+```bash
+julia --project=. scripts/make_figures.jl
+julia --project=. scripts/make_tables.jl
+```
+
+Recompute all 126 experiments, including their independent forward replays:
+
+```bash
+julia --project=. scripts/run_experiments.jl
+```
+
+This last command overwrites the paper records and summary. The
+[reproduction guide](REPRODUCING.md) gives the complete workflow, optional
+animation commands and checksum handling. The solver is in
+[src/StefanDomainControl.jl](src/StefanDomainControl.jl), the public drivers are
+in [scripts/](scripts/), and the records are documented in
+[data/README.md](data/README.md). [figures/paper/](figures/paper/) contains the
+PDFs, [figures/previews/](figures/previews/) the browser previews, and
 [figures/animation/](figures/animation/) the GIF and its final frame.
 
 ## Reading the results
@@ -172,13 +197,22 @@ the terminal volume is imposed exactly, for every $\eta$. Replaying a control
 on a finer grid separates optimization accuracy from discretization error: the
 replay extinction ratio decreases from $1.2\times10^{-3}$ to $1.5\times10^{-4}$
 under four levels of refinement, while the smallest actuator ($b=0.40$) remains
-the least resolved case. The targets $R_f=0.85$ and $1.15$ lie far outside any
-perturbative regime and are reached numerically, but the theorem is local and
-the experiments do not identify its smallness constant. Convergence of the
+the least resolved case. The theorem is local; these experiments, including
+the targets $R_f=0.85$ and $1.15$, do not identify its smallness constant. Convergence of the
 relaxed Picard iteration is observed and verified by substitution into the
 nonlinear discrete equations; it is not covered by the fixed-point argument of
 the paper.
 
-Please cite the accompanying paper by Juan Límaco and Luis P. Yapu and this
-repository when using these materials; metadata are in
-[CITATION.cff](CITATION.cff).
+The extinction ratio divides the terminal norm by the peak norm during the
+controlled trajectory. Interface steering creates a temperature pulse, so this
+ratio can be much smaller than the terminal error relative to the initial
+norm. The terminal-accuracy tables give both absolute norms and initial-relative
+replay errors; the latter are undefined for zero initial temperature. For
+example, the doubled-grid replay errors are approximately 2.6% and 4.1% of the
+initial norm for $R_f=0.85$ and $1.15$, respectively.
+
+Please cite the accompanying manuscript by Daniel Fernández, Luis P. Yapu and
+Juan Límaco and this repository when using these materials; current manuscript
+metadata are in [CITATION.cff](CITATION.cff). The
+[arXiv link](https://arxiv.org/abs/2511.10795) identifies an earlier preprint
+version; its title and author list may differ from the current manuscript.

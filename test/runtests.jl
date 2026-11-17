@@ -55,6 +55,33 @@ end
     @test dot(w, terminal) ≈ pairing rtol=2e-13
 end
 
+@testset "Continuous auxiliary-adjoint normalization at nonunit radius" begin
+    # For a fixed radius and zero potential, the continuum adjoint is the heat
+    # solution with terminal zero and boundary values (0,1). Compare its Fourier
+    # series at positive backward time with the discrete flux multipliers.
+    # This detects the missing R^2 factor even though discrete duality still holds.
+    errors = Float64[]
+    for (N, M) in ((31,256), (63,1024))
+        p = Config(N=N, M=M, R0=1.3, Rf=1.3, T=1.0, reaction=0.0)
+        A, _ = operators(zeros(N), p.R0, 0.0, p)
+        F = lu(A); Lambda = zeros(N,M); lambda = zeros(N)
+        for n in M:-1:1
+            lambda = transpose(F) \ ((p.T/M).*flux_stencil(p) .+ lambda)
+            Lambda[:,n] = lambda
+        end
+        psi = normalized_auxiliary_adjoint(Lambda, fill(p.R0,M+1), p)
+        s = grid(p)
+        exact = s .+ sum([2*(-1)^k/(k*pi).*sin.(k*pi.*s).*
+            exp(-(k*pi)^2*p.T/p.R0^2) for k in 1:100])
+        # The last node is excluded because the one-sided flux stencil places
+        # a discrete source there; no filtering is applied to the returned field.
+        push!(errors, maximum(abs, psi[1:end-1,1] - exact[1:end-1]))
+        @test errors[end] < 1e-3
+        @test psi[end,1] > 1.4
+    end
+    @test errors[1]/errors[2] > 3.5
+end
+
 function volume_functional(x, Wbar, Rbar, p)
     dt = p.T/p.M; Uc = cholesky(mass_control(p)).U
     C = (Uc \ reshape(x, p.K, p.M)) ./ sqrt(dt)
@@ -72,7 +99,7 @@ end
     Wbar = 0.01 .* randn(p.N, p.M+1); Rbar = collect(range(1.0, 0.98, length=p.M+1))
     W, vol, C, psi, info = frozen_control(Wbar, Rbar, p)
     x = randn(p.K*p.M)
-    # The volume functional is affine in the control with gradient given by psi.
+    # The volume functional is affine; gvec is its gradient in the physical metric.
     @test volume_functional(x, Wbar, Rbar, p) ≈ dot(info.gvec, x) + info.l0 rtol=1e-11
     @test volume_functional(zeros(p.K*p.M), Wbar, Rbar, p) ≈ info.l0 rtol=1e-12
     @test size(psi) == (p.N, p.M)
@@ -80,7 +107,7 @@ end
     @test vol[end] ≈ volume(p.Rf) atol=1e-14
     @test info.constraint < 1e-13
     @test info.optimality < 1e-10
-    # Decomposition into the psi-multiple and its orthogonal complement.
+    # Decomposition along the discrete volume gradient and its orthogonal complement.
     parallel = (dot(info.gvec, info.x)/info.psinorm^2) .* info.gvec
     @test norm(parallel) ≈ abs(info.m)/info.psinorm
     @test info.energy^2 ≈ info.energy_parallel^2 + info.energy_orthogonal^2
